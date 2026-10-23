@@ -3,6 +3,8 @@ import torch
 import html
 import re
 import unicodedata
+import math
+import numbers
 
 def normalize_text(text: str) -> str:
     """String -> string: HTML-unescape, Unicode NFKC, collapse whitespace and trim.
@@ -59,19 +61,31 @@ def nucleus_distribution(logits: torch.Tensor, temperature: float,
     Nonfinite/invalid T or p raise ValueError or TypeError. T=0 is invalid.
     Preserve input shape and device; any floating output dtype is acceptable.
     """
-    # Assume the arguments given are correctly typed and valid
+    # Reject a nonfinite or nonpositive temperature using ValueError or TypeError
+    if isinstance(temperature, bool) or not isinstance(temperature, numbers.Real):
+        raise TypeError('temperature must be a real number')
+    if not math.isfinite(temperature) or temperature <= 0:
+        raise ValueError('temperature must be finite and > 0')
+    # Reject a nonfinite top_p or a value outside (0,1] using ValueError or TypeError
+    if isinstance(top_p, bool) or not isinstance(top_p, numbers.Real):
+        raise TypeError('top_p must be a real number')
+    if not math.isfinite(top_p) or not 0 < top_p <= 1:
+        raise ValueError('top_p must be finite and in (0, 1]')
 
     # Divide logits by temperature and compute stable softmax
-    probs = torch.softmax(logits / temperature, dim = 1)
-    probs.sort(descending=True) 
+    logits = logits.to(dtype=torch.float64)    # Ensure logits do not cause inestability
+    probs = torch.softmax(logits / temperature, dim=-1)
+
+    if top_p == 1:  # At top_p=1, return the full softmax distribution.
+        return probs 
     # Sort probabilities in descending order
     sorted_probs, sorted_idx = torch.sort(probs, descending=True)
     # Retain the smallest prefix whose cumulative probability is greater than or equal to top_p, including the crossing token.
     mass_before = torch.cumsum(sorted_probs, dim=-1) - sorted_probs
     keep = mass_before < top_p - 1e-12
-    keep[0] = True  # Always keep the first token
+    keep[0] = True  # Keep at least one token
     # Set remaining probabilities to zero
-    sorted_probs = torch.where(input = keep, other = sorted_probs, condition= torch.zeros_like(sorted_probs))
+    sorted_probs = torch.where(condition = keep, input = sorted_probs, other = torch.zeros_like(sorted_probs))
     # Renormalize the retained probabilities
     sorted_probs = sorted_probs / sorted_probs.sum()
     # Restore the original vocabulary order
