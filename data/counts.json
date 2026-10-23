@@ -1,0 +1,7 @@
+{
+  "raw": 120,
+  "valid_before_dedup": 110,
+  "unique": 100,
+  "training_examples": 300,
+  "evaluation_prompts": 20
+}

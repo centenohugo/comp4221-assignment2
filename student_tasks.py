@@ -1,13 +1,19 @@
 """COMP4221 distinct release: implement only these five functions."""
 import torch
-
+import html
+import re
+import unicodedata
 
 def normalize_text(text: str) -> str:
     """String -> string: HTML-unescape, Unicode NFKC, collapse whitespace and trim.
     Preserve case/punctuation except compatibility changes required by NFKC.
     """
-    raise NotImplementedError('Part A1')
-
+    # Decode HTML entities with html.unescape
+    text = html.unescape(text)
+    # Apply Unicode NFKC normalization
+    text = unicodedata.normalize('NFKC', text)
+    # Collapse whitespace and trim
+    return " ".join(text.split())
 
 def deduplicate_records(records: list[dict]) -> list[dict]:
     """Reject non-dicts; normalize id/question/answer. Keep only IDs matching F[0-9]{3} and
@@ -15,7 +21,33 @@ def deduplicate_records(records: list[dict]) -> list[dict]:
     normalized record, preserving order. Missing/non-string fields are invalid. Discard extra fields.
     Return new dictionaries with these three keys; do not mutate the input.
     """
-    raise NotImplementedError('Part A1')
+    fields = ("id", "question", "answer")
+    id_pattern = re.compile(r"F[0-9]{3}")
+    seen = set()
+    result = []
+    for record in records:
+        # Reject non-dictionary entries and entries with missing or non-string required fields
+        if not isinstance(record, dict):
+            continue
+        if not all(isinstance(record.get(field), str) for field in fields):
+            continue
+        # Normalize all three required fields
+        record_id = normalize_text(record["id"])
+        question = normalize_text(record["question"])
+        answer = normalize_text(record["answer"])
+        # Reject a record if its normalized ID does not exactly match uppercase F followed by
+        # three ASCII digits, or if its normalized question or answer is empty
+        if not id_pattern.fullmatch(record_id) or not question or not answer:
+            continue
+        # Deduplicate using the key (normalized id, normalized question.casefold())
+        key = (record_id, question.casefold())
+        # Keep the first normalized record for each valid key and preserve input order
+        if key in seen:
+            continue
+        seen.add(key)
+        # Return dictionaries containing only id, question, and answer. Ignore extra fields
+        result.append({"id": record_id, "question": question, "answer": answer})
+    return result
 
 
 def nucleus_distribution(logits: torch.Tensor, temperature: float,

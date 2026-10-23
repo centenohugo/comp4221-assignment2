@@ -1,0 +1,302 @@
+[
+  {
+    "id": "F001-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F001]: What is the booking limit for study room S01? 2 hours per booking.\nQuestion: I am checking this service. What is the booking limit for study room S01?"
+      }
+    ],
+    "expected_answer": "2 hours per booking.",
+    "expected_source": "F001"
+  },
+  {
+    "id": "F006-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F006]: What is the booking limit for study room S06? 1 hours per booking.\nQuestion: I am checking this service. What is the booking limit for study room S06?"
+      }
+    ],
+    "expected_answer": "1 hours per booking.",
+    "expected_source": "F006"
+  },
+  {
+    "id": "F011-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F011]: What is the booking limit for study room S11? 3 hours per booking.\nQuestion: I am checking this service. What is the booking limit for study room S11?"
+      }
+    ],
+    "expected_answer": "3 hours per booking.",
+    "expected_source": "F011"
+  },
+  {
+    "id": "F016-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F016]: What is the booking limit for study room S16? 2 hours per booking.\nQuestion: I am checking this service. What is the booking limit for study room S16?"
+      }
+    ],
+    "expected_answer": "2 hours per booking.",
+    "expected_source": "F016"
+  },
+  {
+    "id": "F021-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F021]: How long can I borrow equipment kit K01? 3 days.\nQuestion: I am checking this service. How long can I borrow equipment kit K01?"
+      }
+    ],
+    "expected_answer": "3 days.",
+    "expected_source": "F021"
+  },
+  {
+    "id": "F026-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F026]: How long can I borrow equipment kit K06? 3 days.\nQuestion: I am checking this service. How long can I borrow equipment kit K06?"
+      }
+    ],
+    "expected_answer": "3 days.",
+    "expected_source": "F026"
+  },
+  {
+    "id": "F031-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F031]: How long can I borrow equipment kit K11? 3 days.\nQuestion: I am checking this service. How long can I borrow equipment kit K11?"
+      }
+    ],
+    "expected_answer": "3 days.",
+    "expected_source": "F031"
+  },
+  {
+    "id": "F036-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F036]: How long can I borrow equipment kit K16? 3 days.\nQuestion: I am checking this service. How long can I borrow equipment kit K16?"
+      }
+    ],
+    "expected_answer": "3 days.",
+    "expected_source": "F036"
+  },
+  {
+    "id": "F041-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F041]: Where can I find printer P01? Building A, floor 2.\nQuestion: I am checking this service. Where can I find printer P01?"
+      }
+    ],
+    "expected_answer": "Building A, floor 2.",
+    "expected_source": "F041"
+  },
+  {
+    "id": "F046-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F046]: Where can I find printer P06? Building A, floor 3.\nQuestion: I am checking this service. Where can I find printer P06?"
+      }
+    ],
+    "expected_answer": "Building A, floor 3.",
+    "expected_source": "F046"
+  },
+  {
+    "id": "F051-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F051]: Where can I find printer P11? Building A, floor 4.\nQuestion: I am checking this service. Where can I find printer P11?"
+      }
+    ],
+    "expected_answer": "Building A, floor 4.",
+    "expected_source": "F051"
+  },
+  {
+    "id": "F056-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F056]: Where can I find printer P16? Building A, floor 1.\nQuestion: I am checking this service. Where can I find printer P16?"
+      }
+    ],
+    "expected_answer": "Building A, floor 1.",
+    "expected_source": "F056"
+  },
+  {
+    "id": "F061-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F061]: How often does shuttle route R01 depart? Every 10 minutes.\nQuestion: I am checking this service. How often does shuttle route R01 depart?"
+      }
+    ],
+    "expected_answer": "Every 10 minutes.",
+    "expected_source": "F061"
+  },
+  {
+    "id": "F066-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F066]: How often does shuttle route R06 depart? Every 15 minutes.\nQuestion: I am checking this service. How often does shuttle route R06 depart?"
+      }
+    ],
+    "expected_answer": "Every 15 minutes.",
+    "expected_source": "F066"
+  },
+  {
+    "id": "F071-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F071]: How often does shuttle route R11 depart? Every 20 minutes.\nQuestion: I am checking this service. How often does shuttle route R11 depart?"
+      }
+    ],
+    "expected_answer": "Every 20 minutes.",
+    "expected_source": "F071"
+  },
+  {
+    "id": "F076-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F076]: How often does shuttle route R16 depart? Every 5 minutes.\nQuestion: I am checking this service. How often does shuttle route R16 depart?"
+      }
+    ],
+    "expected_answer": "Every 5 minutes.",
+    "expected_source": "F076"
+  },
+  {
+    "id": "F081-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F081]: What are the opening hours of help desk D01? 9:00 to 17:00.\nQuestion: I am checking this service. What are the opening hours of help desk D01?"
+      }
+    ],
+    "expected_answer": "9:00 to 17:00.",
+    "expected_source": "F081"
+  },
+  {
+    "id": "F086-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F086]: What are the opening hours of help desk D06? 8:00 to 16:00.\nQuestion: I am checking this service. What are the opening hours of help desk D06?"
+      }
+    ],
+    "expected_answer": "8:00 to 16:00.",
+    "expected_source": "F086"
+  },
+  {
+    "id": "F091-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F091]: What are the opening hours of help desk D11? 10:00 to 18:00.\nQuestion: I am checking this service. What are the opening hours of help desk D11?"
+      }
+    ],
+    "expected_answer": "10:00 to 18:00.",
+    "expected_source": "F091"
+  },
+  {
+    "id": "F096-eval",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed by the answer, then Source: followed by its fact ID. Do not add any other text."
+      },
+      {
+        "role": "user",
+        "content": "Fact [F096]: What are the opening hours of help desk D16? 9:00 to 17:00.\nQuestion: I am checking this service. What are the opening hours of help desk D16?"
+      }
+    ],
+    "expected_answer": "9:00 to 17:00.",
+    "expected_source": "F096"
+  }
+]
