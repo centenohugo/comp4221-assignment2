@@ -59,7 +59,25 @@ def nucleus_distribution(logits: torch.Tensor, temperature: float,
     Nonfinite/invalid T or p raise ValueError or TypeError. T=0 is invalid.
     Preserve input shape and device; any floating output dtype is acceptable.
     """
-    raise NotImplementedError('Part B1')
+    # Assume the arguments given are correctly typed and valid
+
+    # Divide logits by temperature and compute stable softmax
+    probs = torch.softmax(logits / temperature, dim = 1)
+    probs.sort(descending=True) 
+    # Sort probabilities in descending order
+    sorted_probs, sorted_idx = torch.sort(probs, descending=True)
+    # Retain the smallest prefix whose cumulative probability is greater than or equal to top_p, including the crossing token.
+    mass_before = torch.cumsum(sorted_probs, dim=-1) - sorted_probs
+    keep = mass_before < top_p - 1e-12
+    keep[0] = True  # Always keep the first token
+    # Set remaining probabilities to zero
+    sorted_probs = torch.where(input = keep, other = sorted_probs, condition= torch.zeros_like(sorted_probs))
+    # Renormalize the retained probabilities
+    sorted_probs = sorted_probs / sorted_probs.sum()
+    # Restore the original vocabulary order
+    out = torch.zeros_like(probs)
+    out[sorted_idx] = sorted_probs
+    return out
 
 
 def final_response_features(input_ids: list[int], assistant_spans: list[tuple[int,int]],
