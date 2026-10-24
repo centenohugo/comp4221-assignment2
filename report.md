@@ -114,7 +114,34 @@ The trainer skips this example because it has no valid targets.
 
 ### C2: Conversation-balanced label smoothing
 
-TODO
+### Loss formula
+ With `log_p = log_softmax(logits)` over the vocabulary of size `V`, the loss of each valid
+target `y` is:
+
+```text
+loss = (1 − ε) · (−log_p[y]) + ε · (1/V) · Σ_v (−log_p[v])
+```
+
+**Meaning of uniform smoothing.** Instead of a target that puts 100% of the
+probability on `y`, the target becomes `1 − ε` on `y` plus `ε / V` on every token.
+This stops the model from becoming over-confident: it is penalized if it pushes the
+probability of all other tokens to zero. 
+### Conversation averaging vs. global token mean
+
+Two conversations with different numbers of valid targets:
+
+| Conversation | Token losses | Valid targets | Conversation mean |
+| --- | --- | ---: | ---: |
+| A | 2, 1, 3 | 3 | (2 + 1 + 3) / 3 = 2.0 |
+| B | 4 | 1 | 4 / 1 = 4.0 |
+
+- **Conversation-balanced (ours):** (2.0 + 4.0) / 2 = **3.0**
+- **Global valid-token mean:** (2 + 1 + 3 + 4) / 4 = **2.5**
+
+### C2 checker
+Missing screenshot
+
+# Missing screenshot!
 
 ## Part D: Fine-tuning and grounded-format evaluation
 

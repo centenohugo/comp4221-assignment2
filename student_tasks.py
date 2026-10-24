@@ -133,4 +133,29 @@ def conversation_balanced_loss(logits: torch.Tensor, labels: torch.Tensor,
     differentiable scalar zero on the logits device (also when L=1). Derive explicitly using log-softmax; do not
     call torch.nn.CrossEntropyLoss or torch.nn.functional.cross_entropy.
     """
-    raise NotImplementedError('Part C2')
+    # Reject a nonfinite epsilon or a value outside [0,1]
+    if isinstance(epsilon, bool) or not isinstance(epsilon, numbers.Real):
+        raise TypeError('epsilon must be a real number')
+    if not math.isfinite(epsilon) or not 0 <= epsilon <= 1:
+        raise ValueError('epsilon must be finite and in [0, 1]')
+
+    # Align logits with labels for next token prediction
+    shift_logits = logits[:, :-1, :]
+    shift_labels = labels[:, 1:]
+    # Ignore targers equal to -100
+    valid = shift_labels != -100    #Boolean mask
+    # Compute stable log-softmax over vocabulary
+    log_p = torch.log_softmax(shift_logits, dim=-1)
+    # Compute for each valid target
+    safe_labels = torch.where(valid, shift_labels, 0)
+    nll = -log_p.gather(-1, safe_labels.unsqueeze(-1)).squeeze(-1)
+    uniform = -log_p.mean(-1)
+    token_loss = ((1 - epsilon) * nll + epsilon * uniform) * valid
+    # Average token loss within each sequence
+    counts = valid.sum(dim=1)
+    nonempty = counts > 0
+    seq_mean = token_loss.sum(dim=1) / counts.clamp(min=1)  # Clamp solves 0/0 for emptu sequences
+    # Average sequence means over nonempty sequences
+    if not nonempty.any():
+        return logits.sum() * 0.0
+    return seq_mean[nonempty].mean()
