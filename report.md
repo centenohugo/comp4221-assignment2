@@ -97,10 +97,7 @@ Only the last span (positions 7–9) is supervised. The earlier response (2–3)
 | `labels` | -100 | -100 | -100 | -100 | -100 | -100 |
 | `attention_mask` | 1 | 1 | 1 | 1 | 1 | 1 |
 
-All labels are `-100`. The earlier response (2–3) is still inside the window, but it
-is **not** used as a fallback: labels are built from the last span of the original
-conversation *before* truncating, so the earlier span was never copied. The trainer
-skips this example because it has no valid targets.
+The trainer skips this example because it has no valid targets.
 
 ### Context vs. supervised targets
 
@@ -111,13 +108,9 @@ skips this example because it has no valid targets.
   to predict*: only the final response, including its EOS. The loss ignores every
   other position.
 
-So earlier turns influence the prediction but are not trained on, and padding is
-neither read (attention 0) nor trained on (label `-100`). Padding is identified by
-position, not by token value, because the pad ID can be the same as the EOS ID.
-
 ### C1 checker
 
-`python checks.py --part C1` → `C1: PASS`
+# Missing screenshot!
 
 ### C2: Conversation-balanced label smoothing
 
