@@ -69,6 +69,58 @@ MISSING INCLUDE SCREENSHOT
 
 ## Part C: Final response supervision and smoothed loss
 
+### C1: Supervise the last original response
+
+Example with 10 tokens, two assistant spans and `pad_token_id = 0`:
+
+- `input_ids = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]`
+- `assistant_spans = [(2, 4), (7, 10)]`, so the last response covers positions 7, 8, 9.
+
+**Without truncation (`max_length = 12`).** The sequence is shorter than 12, so 2
+padding positions are added at the end.
+
+| Position | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `input_ids` | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 0 | 0 |
+| `labels` | -100 | -100 | -100 | -100 | -100 | -100 | -100 | 17 | 18 | 19 | -100 | -100 |
+| `attention_mask` | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 |
+
+Only the last span (positions 7–9) is supervised. The earlier response (2–3) is
+`-100`. Padding has attention 0 and label `-100`.
+
+**With truncation that removes the final response (`max_length = 6`).** Positions
+6–9 are cut, so no padding is needed.
+
+| Position | 0 | 1 | 2 | 3 | 4 | 5 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `input_ids` | 10 | 11 | 12 | 13 | 14 | 15 |
+| `labels` | -100 | -100 | -100 | -100 | -100 | -100 |
+| `attention_mask` | 1 | 1 | 1 | 1 | 1 | 1 |
+
+All labels are `-100`. The earlier response (2–3) is still inside the window, but it
+is **not** used as a fallback: labels are built from the last span of the original
+conversation *before* truncating, so the earlier span was never copied. The trainer
+skips this example because it has no valid targets.
+
+### Context vs. supervised targets
+
+- **Context** (`input_ids` with attention 1) is what the model *reads*: system and
+  user messages, role headers and earlier assistant turns. It helps the model know
+  what to answer.
+- **Supervised targets** (`labels` different from `-100`) are what the model *learns
+  to predict*: only the final response, including its EOS. The loss ignores every
+  other position.
+
+So earlier turns influence the prediction but are not trained on, and padding is
+neither read (attention 0) nor trained on (label `-100`). Padding is identified by
+position, not by token value, because the pad ID can be the same as the EOS ID.
+
+### C1 checker
+
+`python checks.py --part C1` → `C1: PASS`
+
+### C2: Conversation-balanced label smoothing
+
 TODO
 
 ## Part D: Fine-tuning and grounded-format evaluation

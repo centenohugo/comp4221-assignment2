@@ -104,8 +104,23 @@ def final_response_features(input_ids: list[int], assistant_spans: list[tuple[in
     max_length is positive. Return 1-D long tensors of that length: input_ids,
     labels and attention_mask. Padding is positional, even if pad ID equals EOS.
     """
-    raise NotImplementedError('Part C1')
-
+    # Select the last assistant span in the original conversation
+    start, end = assistant_spans[-1] if assistant_spans else (0, 0)
+    # Copy input IDs into labels only at positions in this span.
+    ids = torch.tensor(input_ids, dtype=torch.long)
+    positions = torch.arange(len(ids))
+    in_span = (positions >= start) & (positions < end)   # Boolean mask. True for elements in assitan span
+    labels = torch.where(condition = in_span, input = ids, other = -100)    # Set other label to -100
+    # Right truncate all arrays to max_length
+    labels = labels[:max_length]
+    ids = ids[:max_length]
+    # Right-pad to max_length
+    pad_len = max_length - len(ids)                                                                                     
+    attention_mask = torch.cat([torch.ones(len(ids), dtype=torch.long),                                                   
+                                torch.zeros(pad_len, dtype=torch.long)])                                                                                                
+    ids = torch.cat([ids, torch.full((pad_len,), pad_token_id, dtype=torch.long)])                                 
+    labels = torch.cat([labels, torch.full((pad_len,), -100, dtype=torch.long)])
+    return {'input_ids': ids, 'labels': labels, 'attention_mask': attention_mask}
 
 def conversation_balanced_loss(logits: torch.Tensor, labels: torch.Tensor,
                                epsilon: float = 0.1) -> torch.Tensor:
