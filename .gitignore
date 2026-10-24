@@ -6,3 +6,16 @@ venv/
 # Google Drive
 desktop.ini
 __pycache__
+# Model weights, tokenizer copies and recovery state (large, regenerable)
+*.safetensors
+*.pt
+*.tmp
+# Debug run, not part of the graded experiment
+smoke_checkpoint/
+# From the graded run keep only the small evidence files
+checkpoint/*
+!checkpoint/run_config.json
+!checkpoint/loss.csv
+# Unfinished evaluations and submission archives
+responses.partial.json
+submission*.zip
