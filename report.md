@@ -5,7 +5,7 @@
 - **UST email:** hcentenosanz@connect.ust.hk
 - **AI assistance disclosure:** Used Opus 5.5 for coding explanation before implementation. Run all execution commands myself to use it as checkpoints of knowing what I was doing.
 
-  Used Opus 5.5 for report structure help.
+  Used Opus 5.5 for report structure help and data plotting.
 
 - https://github.com/centenohugo/comp4221-assignment2
 
@@ -145,4 +145,119 @@ Missing screenshot
 
 ## Part D: Fine-tuning and grounded-format evaluation
 
-TODO
+### D1: Training run
+
+Values from `checkpoint/run_config.json` and `checkpoint/loss.csv`.
+
+| Setting | Value |
+| --- | --- |
+| Hardware | NVIDIA GeForce RTX 4090 D  |
+| Completed updates | 100 / 100 (final checkpoint saved) |
+| Usable training examples | 300 / 300 |
+| Sequence length | 256 |
+| Effective batch size | 8 (8 micro-batches of 1, gradients accumulated) |
+| Optimizer | AdamW, learning rate 2e-5, gradient clipping 1.0 |
+| Label smoothing ε | 0.1 |
+
+![Training loss per optimizer update](image/loss.png)
+
+### Roles, content, EOS and headers
+
+`encode_messages` turns each message into tokens in order:
+
+```text
+System:\n<system content>\n
+User:\n<user content>\n
+Assistant:\n<assistant content><EOS>
+```
+
+- **Header** (`System:\n`, `User:\n`, `Assistant:\n`): marks who is speaking. It is
+  never part of an assistant span, so it is context only. At evaluation the prompt
+  ends with `Assistant:\n`, so the model only has to generate the content.
+- **Content**: the message text. For system and user messages it is context. For the
+  final assistant message it is the supervised target.
+- **EOS**: added after every assistant message instead of `\n`, and included in its
+  span. The model therefore learns to stop right after `Source: Fxxx`. This matters
+  because the format check requires exactly two lines, and generation stops at EOS.
+
+### D2: Base vs. fine-tuned evaluation
+
+| Model | Format pass | Grounded-format pass |
+| --- | ---: | ---: |
+| Base (`SmolLM2-135M`) | 0 / 20 (0%) | 0 / 20 (0%) |
+| Fine-tuned (`checkpoint`) | 20 / 20 (100%) | 20 / 20 (100%) |
+
+**Why the base model scores zero.** It is a pretrained model, so it
+has never learned that an `Assistant:` turn ends with EOS. It treats the prompt as a
+document and keeps writing until the 96-token cap: in 14 of 20 cases it copies the
+system instruction, and in the other 6 it writes one `Answer:` line and then invents a
+new `User:` turn with the next fact ID (F062 after F061, etc.). All 20 base responses
+have more than two lines, so they all fail the format check, and a format failure is
+always a grounded-format failure. The fine-tuned model writes exactly the two required
+lines and stops at EOS every time.
+
+Examples
+
+**1. `F001-eval`**: expected `2 hours per booking.` / `F001`
+
+```text
+Base: Use the supplied fictional campus fact. Reply exactly two lines: Answer: followed
+      by the answer, then Source: followed by its fact ID. Do not add any other text.\n
+      User:\nFact [F002]: What is the booking limit for study room S01? […]
+SFT:  Answer: 2 hours per booking.\nSource: F001
+```
+
+The base model repeats the system prompt instead of answering. The first line does
+not start with `Answer: ` and there are far more than two lines, so it fails format.
+The SFT response has two lines, the answer matches exactly and the ID is `F001`, so it
+passes both checks.
+
+**2. `F061-eval`**: expected `Every 10 minutes.` / `F061`
+
+```text
+Base: Answer: 10 minutes.\nUser:\nFact [F062]: How many times does shuttle route R01
+      arrive? Every 10 minutes.\n[…]
+SFT:  Answer: Every 10 minutes.\nSource: F061
+```
+
+The base first line has the right label, but the second line is `User:` instead of
+`Source: F061`, so it fails format. Even if it had stopped there, `10 minutes.` is not
+`every 10 minutes.` after normalization, so it would also fail the grounded check. The
+SFT model copies the answer from the supplied fact word for word and passes.
+
+**3. `F081-eval`**: expected `9:00 to 17:00.` / `F081`
+
+```text
+Base: Answer: 9:00 to 17:00.\nUser:\nFact [F082]: What is the name of the company that
+      provides help desk services? 9:00 to 17:00.\n[…]
+SFT:  Answer: 9:00 to 17:00.\nSource: F081
+```
+
+Here the base answer text is correct, but the response has no `Source:` line and keeps
+going with an invented fact (wrong ID `F082`, made-up question). It fails only because
+of the format. The SFT response is identical in the answer line and adds the correct
+source, so it passes.
+
+**What changed.** The answer content was often already in the base output (it is in
+the prompt), but the base model did not know where to stop or that it had to cite the
+fact ID. Fine-tuning on the final response with EOS taught exactly the format the
+checks require.
+
+### D3: Interpretation
+
+**Why lower loss need not improve the rates.** The loss is an average over tokens of
+how much probability the model gives to the correct token, so it changes smoothly. The
+two rates are all-or-nothing per response. The loss can go down
+because the model becomes more confident on tokens it already got right, or because
+the correct token gains probability without becoming the top choice; in both cases the
+generated text, and so the rates, stay the same. The loss is also computed with the
+correct previous tokens given (teacher forcing), while evaluation generates freely, so
+one early mistake changes everything after it.
+
+**Limitation.** The evaluation is easy and small. Every evaluation fact also
+appears in the training data and the answer is written in the prompt. A model can reach 100% just by
+learning the format and copying the fact, so these results say nothing about unseen
+facts.
+
+As a follow-up we could valuate on facts that never appear in training and putting a second, distractor fact in each prompt. This would test whether the
+model really uses the fact it is asked about, instead of copying the only one it sees.
