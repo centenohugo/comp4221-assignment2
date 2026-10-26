@@ -1,8 +1,8 @@
 {
   "model": "HuggingFaceTB/SmolLM2-135M",
   "seed": 4221,
-  "device": "cpu",
-  "hardware": "CPU",
+  "device": "cuda",
+  "hardware": "NVIDIA GeForce RTX 4090 D",
   "steps": 100,
   "completed_steps": 100,
   "raw_training_examples": 300,
@@ -12,10 +12,10 @@
   "micro_batch_size": 1,
   "learning_rate": 2e-05,
   "epsilon": 0.1,
-  "torch_version": "2.8.0+cpu",
-  "transformers_version": "4.57.1",
-  "training_data_sha256": "956d9cabb8d9a2594f6eead18f38884b1a81eb592ba2eabf18a18d02108b4ecf",
-  "student_tasks_sha256": "960a6264ab9fe4583625de825eb3135961f80f761ad3ee4b6b105262844d0740",
-  "elapsed_training_seconds": 1347.507801300002,
+  "torch_version": "2.8.0+cu128",
+  "transformers_version": "4.57.6",
+  "training_data_sha256": "abe6b2efa12d14a280bc44b2d8b7642aaf09dfe65ad1a766327023bb2cb62ee1",
+  "student_tasks_sha256": "0dd3cfb63ac0e0fc22a16965a1e75d5534f439bf171adc514a52553984b1536c",
+  "elapsed_training_seconds": 112.60666490718722,
   "final_checkpoint_saved": true
 }
