@@ -65,7 +65,7 @@ is spread.
 
 ### Checker
 
-MISSING INCLUDE SCREENSHOT
+![B checker: PASS](image/pass_B.png)
 
 ## Part C: Final response supervision and smoothed loss
 
@@ -110,7 +110,7 @@ The trainer skips this example because it has no valid targets.
 
 ### C1 checker
 
-# Missing screenshot!
+![C1 checker: PASS](image/pass_C1.png)
 
 ### C2: Conversation-balanced label smoothing
 
@@ -139,9 +139,8 @@ Two conversations with different numbers of valid targets:
 - **Global valid-token mean:** (2 + 1 + 3 + 4) / 4 = **2.5**
 
 ### C2 checker
-Missing screenshot
 
-# Missing screenshot!
+![C2 checker: PASS](image/pass_C2.png)
 
 ## Part D: Fine-tuning and grounded-format evaluation
 
@@ -151,6 +150,7 @@ Values from `checkpoint/run_config.json` and `checkpoint/loss.csv`.
 
 | Setting | Value |
 | --- | --- |
+| Initialization (model) | `HuggingFaceTB/SmolLM2-135M` |
 | Hardware | NVIDIA GeForce RTX 4090 D  |
 | Completed updates | 100 / 100 (final checkpoint saved) |
 | Usable training examples | 300 / 300 |
@@ -180,7 +180,15 @@ Assistant:\n<assistant content><EOS>
   span. The model therefore learns to stop right after `Source: Fxxx`. This matters
   because the format check requires exactly two lines, and generation stops at EOS.
 
+Together with the C1 mask, the whole conversation (system, user, earlier assistant
+turns and headers) stays in `input_ids` with attention 1, so the model can read the
+earlier dialogue, but only the final assistant span has labels, so only it is learned.
+
 ### D2: Base vs. fine-tuned evaluation
+
+Both evaluations used the same 20 prompt IDs and the same data hash
+(`evaluation_data_sha256` `061387e0…` in both `summary.json`), greedy decoding and a
+96-new-token cap.
 
 | Model | Format pass | Grounded-format pass |
 | --- | ---: | ---: |
@@ -196,7 +204,8 @@ have more than two lines, so they all fail the format check, and a format failur
 always a grounded-format failure. The fine-tuned model writes exactly the two required
 lines and stops at EOS every time.
 
-Examples
+**Paired examples** (`\n` is a newline; base responses are cut at `[…]`, full text in
+`results/base/responses.json` in the ZIP).
 
 **1. `F001-eval`**: expected `2 hours per booking.` / `F001`
 
@@ -259,5 +268,5 @@ appears in the training data and the answer is written in the prompt. A model ca
 learning the format and copying the fact, so these results say nothing about unseen
 facts.
 
-As a follow-up we could valuate on facts that never appear in training and putting a second, distractor fact in each prompt. This would test whether the
+**Follow-up (not run).** Evaluate on facts that never appear in training and put a second, distractor fact in each prompt. This would test whether the
 model really uses the fact it is asked about, instead of copying the only one it sees.
