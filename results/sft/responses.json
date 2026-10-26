@@ -1,0 +1,122 @@
+[
+  {
+    "id": "F001-eval",
+    "response": "Answer: 2 hours per booking.\nSource: F001",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F006-eval",
+    "response": "Answer: 1 hours per booking.\nSource: F006",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F011-eval",
+    "response": "Answer: 3 hours per booking.\nSource: F011",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F016-eval",
+    "response": "Answer: 2 hours per booking.\nSource: F016",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F021-eval",
+    "response": "Answer: 3 days.\nSource: F021",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F026-eval",
+    "response": "Answer: 3 days.\nSource: F026",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F031-eval",
+    "response": "Answer: 3 days.\nSource: F031",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F036-eval",
+    "response": "Answer: 3 days.\nSource: F036",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F041-eval",
+    "response": "Answer: Building A, floor 2.\nSource: F041",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F046-eval",
+    "response": "Answer: Building A, floor 3.\nSource: F046",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F051-eval",
+    "response": "Answer: Building A, floor 4.\nSource: F051",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F056-eval",
+    "response": "Answer: Building A, floor 1.\nSource: F056",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F061-eval",
+    "response": "Answer: Every 10 minutes.\nSource: F061",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F066-eval",
+    "response": "Answer: Every 15 minutes.\nSource: F066",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F071-eval",
+    "response": "Answer: Every 20 minutes.\nSource: F071",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F076-eval",
+    "response": "Answer: Every 5 minutes.\nSource: F076",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F081-eval",
+    "response": "Answer: 9:00 to 17:00.\nSource: F081",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F086-eval",
+    "response": "Answer: 8:00 to 16:00.\nSource: F086",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F091-eval",
+    "response": "Answer: 10:00 to 18:00.\nSource: F091",
+    "format_pass": true,
+    "grounded_pass": true
+  },
+  {
+    "id": "F096-eval",
+    "response": "Answer: 9:00 to 17:00.\nSource: F096",
+    "format_pass": true,
+    "grounded_pass": true
+  }
+]

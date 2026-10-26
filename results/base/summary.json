@@ -1,0 +1,13 @@
+{
+  "model": "HuggingFaceTB/SmolLM2-135M",
+  "prompts": 20,
+  "max_new_tokens": 96,
+  "do_sample": false,
+  "device": "cuda",
+  "hardware": "NVIDIA GeForce RTX 4090 D",
+  "evaluation_data_sha256": "061387e02808b517173780ae138b724c5be19070a26521fb1f14bbf705c2a28a",
+  "format_pass_count": 0,
+  "format_pass_rate": 0.0,
+  "grounded_pass_count": 0,
+  "grounded_pass_rate": 0.0
+}
